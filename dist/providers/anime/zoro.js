@@ -199,10 +199,16 @@ class Zoro extends models_1.AnimeParser {
             }
         };
         this.retrieveServerId = ($, index, subOrDub) => {
-            return $(`.ps_-block.ps_-block-sub.servers-${subOrDub} > .ps__-list .server-item`)
+            let tmpNode = $(`.ps_-block.ps_-block-sub.servers-${subOrDub} > .ps__-list .server-item`)
                 .map((i, el) => ($(el).attr('data-server-id') == `${index}` ? $(el) : null))
                 .get()[0]
-                .attr('data-id');
+               
+          if(!tmpNode){
+            if(!['dub','raw'].includes(subOrDub)){
+              return  this.retrieveServerId ($, index, 'raw')
+            }
+          }
+           return tmpNode && tmpNode.attr('data-id');
         };
         /**
          * @param url string
